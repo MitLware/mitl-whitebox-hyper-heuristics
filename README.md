@@ -2,7 +2,7 @@
 
 Whitebox analog of the hyflex hyper-heuristic framework
 
-This provides an elementary example of the approach described in [A Re-characterization of Hyper-Heuristics][1].
+This provides an elementary example of the approach described in [*"A Re-characterization of Hyper-Heuristics"*](https://doi.org/10.1007/978-3-319-58253-5_5) [1].
 
 By way of a whitebox analog of the 'Hyflex' HH framework, this takes as input any problem domain (examples used are SAT, bin-packing, TSP, VRP)
 generically described via the [XCSP](http://www.xcsp.org/) constraint programming format. 
