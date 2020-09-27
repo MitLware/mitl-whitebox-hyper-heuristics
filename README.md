@@ -8,7 +8,7 @@ By way of a whitebox analog of the 'Hyflex' HH framework, this takes as input an
 generically described via the *[XCSP](http://www.xcsp.org/)* constraint programming format. 
 
 It then uses heuristic pattern matching to determine if the problem constraints are isomorphic to the TSP: 
-if so, then the problem is rewritten on the fly to *[TSPLib](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/) format and the dedicated TSP solver ( *[Concorde](http://www.math.uwaterloo.ca/tsp/concorde.html)*'s 'LINKERN') is used, 
+if so, then the problem is rewritten on the fly to [TSPLib](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/) format and a dedicated TSP solver ( *[Concorde](http://www.math.uwaterloo.ca/tsp/concorde.html)*'s 'LINKERN') is used, 
 if not then the generic *[Choco Solver](https://choco-solver.org/)* is invoked instead.
 
 [1]: Swan J., De Causmaecker P., Martin S., Özcan E. (2018) 
