@@ -1,0 +1,634 @@
+<instance format="XCSP3" type="COP">
+  <variables>
+    <array id="x" note="x[i][j] is 1 iff the arc (i,j) is part of a route" size="[22][22]">
+      <domain for="x[0][0] x[1][1] x[2][2] x[3][3] x[4][4] x[5][5] x[6][6] x[7][7] x[8][8] x[9][9] x[10][10] x[11][11] x[12][12] x[13][13] x[14][14] x[15][15] x[16][16] x[17][17] x[18][18] x[19][19] x[20][20] x[21][21]"> 0 </domain>
+      <domain for="x[0][1..21] x[1][0] x[1][2..21] x[2][0..1] x[2][3..21] x[3][0..2] x[3][4..21] x[4][0..3] x[4][5..21] x[5][0..4] x[5][6..21] x[6][0..5] x[6][7..21] x[7][0..6] x[7][8..21] x[8][0..7] x[8][9..21] x[9][0..8] x[9][10..21] x[10][0..9] x[10][11..21] x[11][0..10] x[11][12..21] x[12][0..11] x[12][13..21] x[13][0..12] x[13][14..21] x[14][0..13] x[14][15..21] x[15][0..14] x[15][16..21] x[16][0..15] x[16][17..21] x[17][0..16] x[17][18..21] x[18][0..17] x[18][19..21] x[19][0..18] x[19][20..21] x[20][0..19] x[20][21] x[21][0..20]"> 0 1 </domain>
+    </array>
+    <array id="u" note="u[i] is the load of vehicule after visting node i (used for subtour elimination)" size="[22]">
+      <domain for="u[0]"> 0 </domain>
+      <domain for="u[1..21]"> 0..3000 </domain>
+    </array>
+  </variables>
+  <constraints>
+    <group note="Exactly one incoming arc for each node j other than depot (node 0)">
+      <count>
+        <list> %... </list>
+        <values> 1 </values>
+        <condition> (eq,1) </condition>
+      </count>
+      <args> x[0][1] x[2..21][1] </args>
+      <args> x[0..1][2] x[3..21][2] </args>
+      <args> x[0..2][3] x[4..21][3] </args>
+      <args> x[0..3][4] x[5..21][4] </args>
+      <args> x[0..4][5] x[6..21][5] </args>
+      <args> x[0..5][6] x[7..21][6] </args>
+      <args> x[0..6][7] x[8..21][7] </args>
+      <args> x[0..7][8] x[9..21][8] </args>
+      <args> x[0..8][9] x[10..21][9] </args>
+      <args> x[0..9][10] x[11..21][10] </args>
+      <args> x[0..10][11] x[12..21][11] </args>
+      <args> x[0..11][12] x[13..21][12] </args>
+      <args> x[0..12][13] x[14..21][13] </args>
+      <args> x[0..13][14] x[15..21][14] </args>
+      <args> x[0..14][15] x[16..21][15] </args>
+      <args> x[0..15][16] x[17..21][16] </args>
+      <args> x[0..16][17] x[18..21][17] </args>
+      <args> x[0..17][18] x[19..21][18] </args>
+      <args> x[0..18][19] x[20..21][19] </args>
+      <args> x[0..19][20] x[21][20] </args>
+      <args> x[0..20][21] </args>
+    </group>
+    <group note="Exactly one outgoing arc for each node i other than depot (node 0)">
+      <count>
+        <list> %... </list>
+        <values> 1 </values>
+        <condition> (eq,1) </condition>
+      </count>
+      <args> x[1][0] x[1][2..21] </args>
+      <args> x[2][0..1] x[2][3..21] </args>
+      <args> x[3][0..2] x[3][4..21] </args>
+      <args> x[4][0..3] x[4][5..21] </args>
+      <args> x[5][0..4] x[5][6..21] </args>
+      <args> x[6][0..5] x[6][7..21] </args>
+      <args> x[7][0..6] x[7][8..21] </args>
+      <args> x[8][0..7] x[8][9..21] </args>
+      <args> x[9][0..8] x[9][10..21] </args>
+      <args> x[10][0..9] x[10][11..21] </args>
+      <args> x[11][0..10] x[11][12..21] </args>
+      <args> x[12][0..11] x[12][13..21] </args>
+      <args> x[13][0..12] x[13][14..21] </args>
+      <args> x[14][0..13] x[14][15..21] </args>
+      <args> x[15][0..14] x[15][16..21] </args>
+      <args> x[16][0..15] x[16][17..21] </args>
+      <args> x[17][0..16] x[17][18..21] </args>
+      <args> x[18][0..17] x[18][19..21] </args>
+      <args> x[19][0..18] x[19][20..21] </args>
+      <args> x[20][0..19] x[20][21] </args>
+      <args> x[21][0..20] </args>
+    </group>
+    <block note="Miller–Tucker–Zemlin subtour elimination">
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2300) </condition>
+        </sum>
+        <args> u[1..2] x[1][2] </args>
+        <args> u[1] u[21] x[1][21] </args>
+        <args> u[2] u[21] x[2][21] </args>
+        <args> u[3] u[2] x[3][2] </args>
+        <args> u[3] u[21] x[3][21] </args>
+        <args> u[4] u[2] x[4][2] </args>
+        <args> u[4] u[21] x[4][21] </args>
+        <args> u[5] u[2] x[5][2] </args>
+        <args> u[5] u[21] x[5][21] </args>
+        <args> u[6] u[2] x[6][2] </args>
+        <args> u[6] u[21] x[6][21] </args>
+        <args> u[7] u[2] x[7][2] </args>
+        <args> u[7] u[21] x[7][21] </args>
+        <args> u[8] u[2] x[8][2] </args>
+        <args> u[8] u[21] x[8][21] </args>
+        <args> u[9] u[2] x[9][2] </args>
+        <args> u[9] u[21] x[9][21] </args>
+        <args> u[10] u[2] x[10][2] </args>
+        <args> u[10] u[21] x[10][21] </args>
+        <args> u[11] u[2] x[11][2] </args>
+        <args> u[11] u[21] x[11][21] </args>
+        <args> u[12] u[2] x[12][2] </args>
+        <args> u[12] u[21] x[12][21] </args>
+        <args> u[13] u[2] x[13][2] </args>
+        <args> u[13] u[21] x[13][21] </args>
+        <args> u[14] u[2] x[14][2] </args>
+        <args> u[14] u[21] x[14][21] </args>
+        <args> u[15] u[2] x[15][2] </args>
+        <args> u[15] u[21] x[15][21] </args>
+        <args> u[16] u[2] x[16][2] </args>
+        <args> u[16] u[21] x[16][21] </args>
+        <args> u[17] u[2] x[17][2] </args>
+        <args> u[17] u[21] x[17][21] </args>
+        <args> u[18] u[2] x[18][2] </args>
+        <args> u[18] u[21] x[18][21] </args>
+        <args> u[19] u[2] x[19][2] </args>
+        <args> u[19] u[21] x[19][21] </args>
+        <args> u[20] u[2] x[20][2] </args>
+        <args> u[20..21] x[20][21] </args>
+        <args> u[21] u[2] x[21][2] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2200) </condition>
+        </sum>
+        <args> u[1] u[3] x[1][3] </args>
+        <args> u[1] u[7] x[1][7] </args>
+        <args> u[2..3] x[2][3] </args>
+        <args> u[2] u[7] x[2][7] </args>
+        <args> u[3] u[7] x[3][7] </args>
+        <args> u[4] u[3] x[4][3] </args>
+        <args> u[4] u[7] x[4][7] </args>
+        <args> u[5] u[3] x[5][3] </args>
+        <args> u[5] u[7] x[5][7] </args>
+        <args> u[6] u[3] x[6][3] </args>
+        <args> u[6..7] x[6][7] </args>
+        <args> u[7] u[3] x[7][3] </args>
+        <args> u[8] u[3] x[8][3] </args>
+        <args> u[8] u[7] x[8][7] </args>
+        <args> u[9] u[3] x[9][3] </args>
+        <args> u[9] u[7] x[9][7] </args>
+        <args> u[10] u[3] x[10][3] </args>
+        <args> u[10] u[7] x[10][7] </args>
+        <args> u[11] u[3] x[11][3] </args>
+        <args> u[11] u[7] x[11][7] </args>
+        <args> u[12] u[3] x[12][3] </args>
+        <args> u[12] u[7] x[12][7] </args>
+        <args> u[13] u[3] x[13][3] </args>
+        <args> u[13] u[7] x[13][7] </args>
+        <args> u[14] u[3] x[14][3] </args>
+        <args> u[14] u[7] x[14][7] </args>
+        <args> u[15] u[3] x[15][3] </args>
+        <args> u[15] u[7] x[15][7] </args>
+        <args> u[16] u[3] x[16][3] </args>
+        <args> u[16] u[7] x[16][7] </args>
+        <args> u[17] u[3] x[17][3] </args>
+        <args> u[17] u[7] x[17][7] </args>
+        <args> u[18] u[3] x[18][3] </args>
+        <args> u[18] u[7] x[18][7] </args>
+        <args> u[19] u[3] x[19][3] </args>
+        <args> u[19] u[7] x[19][7] </args>
+        <args> u[20] u[3] x[20][3] </args>
+        <args> u[20] u[7] x[20][7] </args>
+        <args> u[21] u[3] x[21][3] </args>
+        <args> u[21] u[7] x[21][7] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,1600) </condition>
+        </sum>
+        <args> u[1] u[4] x[1][4] </args>
+        <args> u[2] u[4] x[2][4] </args>
+        <args> u[3..4] x[3][4] </args>
+        <args> u[5] u[4] x[5][4] </args>
+        <args> u[6] u[4] x[6][4] </args>
+        <args> u[7] u[4] x[7][4] </args>
+        <args> u[8] u[4] x[8][4] </args>
+        <args> u[9] u[4] x[9][4] </args>
+        <args> u[10] u[4] x[10][4] </args>
+        <args> u[11] u[4] x[11][4] </args>
+        <args> u[12] u[4] x[12][4] </args>
+        <args> u[13] u[4] x[13][4] </args>
+        <args> u[14] u[4] x[14][4] </args>
+        <args> u[15] u[4] x[15][4] </args>
+        <args> u[16] u[4] x[16][4] </args>
+        <args> u[17] u[4] x[17][4] </args>
+        <args> u[18] u[4] x[18][4] </args>
+        <args> u[19] u[4] x[19][4] </args>
+        <args> u[20] u[4] x[20][4] </args>
+        <args> u[21] u[4] x[21][4] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,900) </condition>
+        </sum>
+        <args> u[1] u[5] x[1][5] </args>
+        <args> u[1] u[16] x[1][16] </args>
+        <args> u[2] u[5] x[2][5] </args>
+        <args> u[2] u[16] x[2][16] </args>
+        <args> u[3] u[5] x[3][5] </args>
+        <args> u[3] u[16] x[3][16] </args>
+        <args> u[4..5] x[4][5] </args>
+        <args> u[4] u[16] x[4][16] </args>
+        <args> u[5] u[16] x[5][16] </args>
+        <args> u[6] u[5] x[6][5] </args>
+        <args> u[6] u[16] x[6][16] </args>
+        <args> u[7] u[5] x[7][5] </args>
+        <args> u[7] u[16] x[7][16] </args>
+        <args> u[8] u[5] x[8][5] </args>
+        <args> u[8] u[16] x[8][16] </args>
+        <args> u[9] u[5] x[9][5] </args>
+        <args> u[9] u[16] x[9][16] </args>
+        <args> u[10] u[5] x[10][5] </args>
+        <args> u[10] u[16] x[10][16] </args>
+        <args> u[11] u[5] x[11][5] </args>
+        <args> u[11] u[16] x[11][16] </args>
+        <args> u[12] u[5] x[12][5] </args>
+        <args> u[12] u[16] x[12][16] </args>
+        <args> u[13] u[5] x[13][5] </args>
+        <args> u[13] u[16] x[13][16] </args>
+        <args> u[14] u[5] x[14][5] </args>
+        <args> u[14] u[16] x[14][16] </args>
+        <args> u[15] u[5] x[15][5] </args>
+        <args> u[15..16] x[15][16] </args>
+        <args> u[16] u[5] x[16][5] </args>
+        <args> u[17] u[5] x[17][5] </args>
+        <args> u[17] u[16] x[17][16] </args>
+        <args> u[18] u[5] x[18][5] </args>
+        <args> u[18] u[16] x[18][16] </args>
+        <args> u[19] u[5] x[19][5] </args>
+        <args> u[19] u[16] x[19][16] </args>
+        <args> u[20] u[5] x[20][5] </args>
+        <args> u[20] u[16] x[20][16] </args>
+        <args> u[21] u[5] x[21][5] </args>
+        <args> u[21] u[16] x[21][16] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2600) </condition>
+        </sum>
+        <args> u[1] u[6] x[1][6] </args>
+        <args> u[2] u[6] x[2][6] </args>
+        <args> u[3] u[6] x[3][6] </args>
+        <args> u[4] u[6] x[4][6] </args>
+        <args> u[5..6] x[5][6] </args>
+        <args> u[7] u[6] x[7][6] </args>
+        <args> u[8] u[6] x[8][6] </args>
+        <args> u[9] u[6] x[9][6] </args>
+        <args> u[10] u[6] x[10][6] </args>
+        <args> u[11] u[6] x[11][6] </args>
+        <args> u[12] u[6] x[12][6] </args>
+        <args> u[13] u[6] x[13][6] </args>
+        <args> u[14] u[6] x[14][6] </args>
+        <args> u[15] u[6] x[15][6] </args>
+        <args> u[16] u[6] x[16][6] </args>
+        <args> u[17] u[6] x[17][6] </args>
+        <args> u[18] u[6] x[18][6] </args>
+        <args> u[19] u[6] x[19][6] </args>
+        <args> u[20] u[6] x[20][6] </args>
+        <args> u[21] u[6] x[21][6] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2900) </condition>
+        </sum>
+        <args> u[1] u[8] x[1][8] </args>
+        <args> u[2] u[8] x[2][8] </args>
+        <args> u[3] u[8] x[3][8] </args>
+        <args> u[4] u[8] x[4][8] </args>
+        <args> u[5] u[8] x[5][8] </args>
+        <args> u[6] u[8] x[6][8] </args>
+        <args> u[7..8] x[7][8] </args>
+        <args> u[9] u[8] x[9][8] </args>
+        <args> u[10] u[8] x[10][8] </args>
+        <args> u[11] u[8] x[11][8] </args>
+        <args> u[12] u[8] x[12][8] </args>
+        <args> u[13] u[8] x[13][8] </args>
+        <args> u[14] u[8] x[14][8] </args>
+        <args> u[15] u[8] x[15][8] </args>
+        <args> u[16] u[8] x[16][8] </args>
+        <args> u[17] u[8] x[17][8] </args>
+        <args> u[18] u[8] x[18][8] </args>
+        <args> u[19] u[8] x[19][8] </args>
+        <args> u[20] u[8] x[20][8] </args>
+        <args> u[21] u[8] x[21][8] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2500) </condition>
+        </sum>
+        <args> u[1] u[9] x[1][9] </args>
+        <args> u[2] u[9] x[2][9] </args>
+        <args> u[3] u[9] x[3][9] </args>
+        <args> u[4] u[9] x[4][9] </args>
+        <args> u[5] u[9] x[5][9] </args>
+        <args> u[6] u[9] x[6][9] </args>
+        <args> u[7] u[9] x[7][9] </args>
+        <args> u[8..9] x[8][9] </args>
+        <args> u[10] u[9] x[10][9] </args>
+        <args> u[11] u[9] x[11][9] </args>
+        <args> u[12] u[9] x[12][9] </args>
+        <args> u[13] u[9] x[13][9] </args>
+        <args> u[14] u[9] x[14][9] </args>
+        <args> u[15] u[9] x[15][9] </args>
+        <args> u[16] u[9] x[16][9] </args>
+        <args> u[17] u[9] x[17][9] </args>
+        <args> u[18] u[9] x[18][9] </args>
+        <args> u[19] u[9] x[19][9] </args>
+        <args> u[20] u[9] x[20][9] </args>
+        <args> u[21] u[9] x[21][9] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2400) </condition>
+        </sum>
+        <args> u[1] u[10] x[1][10] </args>
+        <args> u[2] u[10] x[2][10] </args>
+        <args> u[3] u[10] x[3][10] </args>
+        <args> u[4] u[10] x[4][10] </args>
+        <args> u[5] u[10] x[5][10] </args>
+        <args> u[6] u[10] x[6][10] </args>
+        <args> u[7] u[10] x[7][10] </args>
+        <args> u[8] u[10] x[8][10] </args>
+        <args> u[9..10] x[9][10] </args>
+        <args> u[11] u[10] x[11][10] </args>
+        <args> u[12] u[10] x[12][10] </args>
+        <args> u[13] u[10] x[13][10] </args>
+        <args> u[14] u[10] x[14][10] </args>
+        <args> u[15] u[10] x[15][10] </args>
+        <args> u[16] u[10] x[16][10] </args>
+        <args> u[17] u[10] x[17][10] </args>
+        <args> u[18] u[10] x[18][10] </args>
+        <args> u[19] u[10] x[19][10] </args>
+        <args> u[20] u[10] x[20][10] </args>
+        <args> u[21] u[10] x[21][10] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,1800) </condition>
+        </sum>
+        <args> u[1] u[11] x[1][11] </args>
+        <args> u[2] u[11] x[2][11] </args>
+        <args> u[3] u[11] x[3][11] </args>
+        <args> u[4] u[11] x[4][11] </args>
+        <args> u[5] u[11] x[5][11] </args>
+        <args> u[6] u[11] x[6][11] </args>
+        <args> u[7] u[11] x[7][11] </args>
+        <args> u[8] u[11] x[8][11] </args>
+        <args> u[9] u[11] x[9][11] </args>
+        <args> u[10..11] x[10][11] </args>
+        <args> u[12] u[11] x[12][11] </args>
+        <args> u[13] u[11] x[13][11] </args>
+        <args> u[14] u[11] x[14][11] </args>
+        <args> u[15] u[11] x[15][11] </args>
+        <args> u[16] u[11] x[16][11] </args>
+        <args> u[17] u[11] x[17][11] </args>
+        <args> u[18] u[11] x[18][11] </args>
+        <args> u[19] u[11] x[19][11] </args>
+        <args> u[20] u[11] x[20][11] </args>
+        <args> u[21] u[11] x[21][11] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,1700) </condition>
+        </sum>
+        <args> u[1] u[12] x[1][12] </args>
+        <args> u[1] u[13] x[1][13] </args>
+        <args> u[2] u[12] x[2][12] </args>
+        <args> u[2] u[13] x[2][13] </args>
+        <args> u[3] u[12] x[3][12] </args>
+        <args> u[3] u[13] x[3][13] </args>
+        <args> u[4] u[12] x[4][12] </args>
+        <args> u[4] u[13] x[4][13] </args>
+        <args> u[5] u[12] x[5][12] </args>
+        <args> u[5] u[13] x[5][13] </args>
+        <args> u[6] u[12] x[6][12] </args>
+        <args> u[6] u[13] x[6][13] </args>
+        <args> u[7] u[12] x[7][12] </args>
+        <args> u[7] u[13] x[7][13] </args>
+        <args> u[8] u[12] x[8][12] </args>
+        <args> u[8] u[13] x[8][13] </args>
+        <args> u[9] u[12] x[9][12] </args>
+        <args> u[9] u[13] x[9][13] </args>
+        <args> u[10] u[12] x[10][12] </args>
+        <args> u[10] u[13] x[10][13] </args>
+        <args> u[11..12] x[11][12] </args>
+        <args> u[11] u[13] x[11][13] </args>
+        <args> u[12..13] x[12][13] </args>
+        <args> u[13] u[12] x[13][12] </args>
+        <args> u[14] u[12] x[14][12] </args>
+        <args> u[14] u[13] x[14][13] </args>
+        <args> u[15] u[12] x[15][12] </args>
+        <args> u[15] u[13] x[15][13] </args>
+        <args> u[16] u[12] x[16][12] </args>
+        <args> u[16] u[13] x[16][13] </args>
+        <args> u[17] u[12] x[17][12] </args>
+        <args> u[17] u[13] x[17][13] </args>
+        <args> u[18] u[12] x[18][12] </args>
+        <args> u[18] u[13] x[18][13] </args>
+        <args> u[19] u[12] x[19][12] </args>
+        <args> u[19] u[13] x[19][13] </args>
+        <args> u[20] u[12] x[20][12] </args>
+        <args> u[20] u[13] x[20][13] </args>
+        <args> u[21] u[12] x[21][12] </args>
+        <args> u[21] u[13] x[21][13] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2700) </condition>
+        </sum>
+        <args> u[1] u[14] x[1][14] </args>
+        <args> u[2] u[14] x[2][14] </args>
+        <args> u[3] u[14] x[3][14] </args>
+        <args> u[4] u[14] x[4][14] </args>
+        <args> u[5] u[14] x[5][14] </args>
+        <args> u[6] u[14] x[6][14] </args>
+        <args> u[7] u[14] x[7][14] </args>
+        <args> u[8] u[14] x[8][14] </args>
+        <args> u[9] u[14] x[9][14] </args>
+        <args> u[10] u[14] x[10][14] </args>
+        <args> u[11] u[14] x[11][14] </args>
+        <args> u[12] u[14] x[12][14] </args>
+        <args> u[13..14] x[13][14] </args>
+        <args> u[15] u[14] x[15][14] </args>
+        <args> u[16] u[14] x[16][14] </args>
+        <args> u[17] u[14] x[17][14] </args>
+        <args> u[18] u[14] x[18][14] </args>
+        <args> u[19] u[14] x[19][14] </args>
+        <args> u[20] u[14] x[20][14] </args>
+        <args> u[21] u[14] x[21][14] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2100) </condition>
+        </sum>
+        <args> u[1] u[15] x[1][15] </args>
+        <args> u[1] u[18] x[1][18] </args>
+        <args> u[2] u[15] x[2][15] </args>
+        <args> u[2] u[18] x[2][18] </args>
+        <args> u[3] u[15] x[3][15] </args>
+        <args> u[3] u[18] x[3][18] </args>
+        <args> u[4] u[15] x[4][15] </args>
+        <args> u[4] u[18] x[4][18] </args>
+        <args> u[5] u[15] x[5][15] </args>
+        <args> u[5] u[18] x[5][18] </args>
+        <args> u[6] u[15] x[6][15] </args>
+        <args> u[6] u[18] x[6][18] </args>
+        <args> u[7] u[15] x[7][15] </args>
+        <args> u[7] u[18] x[7][18] </args>
+        <args> u[8] u[15] x[8][15] </args>
+        <args> u[8] u[18] x[8][18] </args>
+        <args> u[9] u[15] x[9][15] </args>
+        <args> u[9] u[18] x[9][18] </args>
+        <args> u[10] u[15] x[10][15] </args>
+        <args> u[10] u[18] x[10][18] </args>
+        <args> u[11] u[15] x[11][15] </args>
+        <args> u[11] u[18] x[11][18] </args>
+        <args> u[12] u[15] x[12][15] </args>
+        <args> u[12] u[18] x[12][18] </args>
+        <args> u[13] u[15] x[13][15] </args>
+        <args> u[13] u[18] x[13][18] </args>
+        <args> u[14..15] x[14][15] </args>
+        <args> u[14] u[18] x[14][18] </args>
+        <args> u[15] u[18] x[15][18] </args>
+        <args> u[16] u[15] x[16][15] </args>
+        <args> u[16] u[18] x[16][18] </args>
+        <args> u[17] u[15] x[17][15] </args>
+        <args> u[17..18] x[17][18] </args>
+        <args> u[18] u[15] x[18][15] </args>
+        <args> u[19] u[15] x[19][15] </args>
+        <args> u[19] u[18] x[19][18] </args>
+        <args> u[20] u[15] x[20][15] </args>
+        <args> u[20] u[18] x[20][18] </args>
+        <args> u[21] u[15] x[21][15] </args>
+        <args> u[21] u[18] x[21][18] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,2000) </condition>
+        </sum>
+        <args> u[1] u[17] x[1][17] </args>
+        <args> u[2] u[17] x[2][17] </args>
+        <args> u[3] u[17] x[3][17] </args>
+        <args> u[4] u[17] x[4][17] </args>
+        <args> u[5] u[17] x[5][17] </args>
+        <args> u[6] u[17] x[6][17] </args>
+        <args> u[7] u[17] x[7][17] </args>
+        <args> u[8] u[17] x[8][17] </args>
+        <args> u[9] u[17] x[9][17] </args>
+        <args> u[10] u[17] x[10][17] </args>
+        <args> u[11] u[17] x[11][17] </args>
+        <args> u[12] u[17] x[12][17] </args>
+        <args> u[13] u[17] x[13][17] </args>
+        <args> u[14] u[17] x[14][17] </args>
+        <args> u[15] u[17] x[15][17] </args>
+        <args> u[16..17] x[16][17] </args>
+        <args> u[18] u[17] x[18][17] </args>
+        <args> u[19] u[17] x[19][17] </args>
+        <args> u[20] u[17] x[20][17] </args>
+        <args> u[21] u[17] x[21][17] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,500) </condition>
+        </sum>
+        <args> u[1] u[19] x[1][19] </args>
+        <args> u[2] u[19] x[2][19] </args>
+        <args> u[3] u[19] x[3][19] </args>
+        <args> u[4] u[19] x[4][19] </args>
+        <args> u[5] u[19] x[5][19] </args>
+        <args> u[6] u[19] x[6][19] </args>
+        <args> u[7] u[19] x[7][19] </args>
+        <args> u[8] u[19] x[8][19] </args>
+        <args> u[9] u[19] x[9][19] </args>
+        <args> u[10] u[19] x[10][19] </args>
+        <args> u[11] u[19] x[11][19] </args>
+        <args> u[12] u[19] x[12][19] </args>
+        <args> u[13] u[19] x[13][19] </args>
+        <args> u[14] u[19] x[14][19] </args>
+        <args> u[15] u[19] x[15][19] </args>
+        <args> u[16] u[19] x[16][19] </args>
+        <args> u[17] u[19] x[17][19] </args>
+        <args> u[18..19] x[18][19] </args>
+        <args> u[20] u[19] x[20][19] </args>
+        <args> u[21] u[19] x[21][19] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,1200) </condition>
+        </sum>
+        <args> u[1] u[20] x[1][20] </args>
+        <args> u[2] u[20] x[2][20] </args>
+        <args> u[3] u[20] x[3][20] </args>
+        <args> u[4] u[20] x[4][20] </args>
+        <args> u[5] u[20] x[5][20] </args>
+        <args> u[6] u[20] x[6][20] </args>
+        <args> u[7] u[20] x[7][20] </args>
+        <args> u[8] u[20] x[8][20] </args>
+        <args> u[9] u[20] x[9][20] </args>
+        <args> u[10] u[20] x[10][20] </args>
+        <args> u[11] u[20] x[11][20] </args>
+        <args> u[12] u[20] x[12][20] </args>
+        <args> u[13] u[20] x[13][20] </args>
+        <args> u[14] u[20] x[14][20] </args>
+        <args> u[15] u[20] x[15][20] </args>
+        <args> u[16] u[20] x[16][20] </args>
+        <args> u[17] u[20] x[17][20] </args>
+        <args> u[18] u[20] x[18][20] </args>
+        <args> u[19..20] x[19][20] </args>
+        <args> u[21] u[20] x[21][20] </args>
+      </group>
+      <group>
+        <sum>
+          <list> %... </list>
+          <coeffs> 1 -1 3000 </coeffs>
+          <condition> (le,1900) </condition>
+        </sum>
+        <args> u[2] u[1] x[2][1] </args>
+        <args> u[3] u[1] x[3][1] </args>
+        <args> u[4] u[1] x[4][1] </args>
+        <args> u[5] u[1] x[5][1] </args>
+        <args> u[6] u[1] x[6][1] </args>
+        <args> u[7] u[1] x[7][1] </args>
+        <args> u[8] u[1] x[8][1] </args>
+        <args> u[9] u[1] x[9][1] </args>
+        <args> u[10] u[1] x[10][1] </args>
+        <args> u[11] u[1] x[11][1] </args>
+        <args> u[12] u[1] x[12][1] </args>
+        <args> u[13] u[1] x[13][1] </args>
+        <args> u[14] u[1] x[14][1] </args>
+        <args> u[15] u[1] x[15][1] </args>
+        <args> u[16] u[1] x[16][1] </args>
+        <args> u[17] u[1] x[17][1] </args>
+        <args> u[18] u[1] x[18][1] </args>
+        <args> u[19] u[1] x[19][1] </args>
+        <args> u[20] u[1] x[20][1] </args>
+        <args> u[21] u[1] x[21][1] </args>
+      </group>
+    </block>
+    <group>
+      <intension> ge(%0,%1) </intension>
+      <args> u[1] 1100 </args>
+      <args> u[2] 700 </args>
+      <args> u[3] 800 </args>
+      <args> u[4] 1400 </args>
+      <args> u[5] 2100 </args>
+      <args> u[6] 400 </args>
+      <args> u[7] 800 </args>
+      <args> u[8] 100 </args>
+      <args> u[9] 500 </args>
+      <args> u[10] 600 </args>
+      <args> u[11] 1200 </args>
+      <args> u[12] 1300 </args>
+      <args> u[13] 1300 </args>
+      <args> u[14] 300 </args>
+      <args> u[15] 900 </args>
+      <args> u[16] 2100 </args>
+      <args> u[17] 1000 </args>
+      <args> u[18] 900 </args>
+      <args> u[19] 2500 </args>
+      <args> u[20] 1800 </args>
+      <args> u[21] 700 </args>
+    </group>
+  </constraints>
+  <objectives>
+    <minimize type="sum">
+      <list> x[][] </list>
+      <coeffs> 0 49 48 42 41 37 31 31 24 28 17 23 11 16 7 20 10 22 29 31 32 34 49 0 9 23 26 21 19 24 27 30 32 40 47 55 56 57 59 71 72 78 79 83 48 9 0 30 32 15 20 19 28 25 31 43 44 56 55 53 58 69 68 78 76 81 42 23 30 0 3 34 18 33 19 38 28 23 45 40 49 57 49 63 70 65 73 73 41 26 32 3 0 35 19 34 19 38 28 21 45 38 48 57 48 62 69 63 72 71 37 21 15 34 35 0 17 5 22 11 21 38 31 47 43 39 47 56 54 67 63 69 31 19 20 18 19 17 0 16 8 20 14 23 31 36 38 42 40 53 56 59 62 64 31 24 19 33 34 5 16 0 19 6 16 35 25 43 37 34 41 51 49 62 57 64 24 27 28 19 19 22 8 19 0 21 9 16 26 28 31 38 33 46 51 52 56 57 28 30 25 38 38 11 20 6 21 0 16 35 20 40 33 28 37 46 43 58 52 59 17 32 31 28 28 21 14 16 9 16 0 20 17 26 24 29 27 39 42 47 48 51 23 40 43 23 21 38 23 35 16 35 20 0 31 17 29 43 28 42 52 42 53 50 11 47 44 45 45 31 31 25 26 20 17 31 0 27 13 12 19 26 25 39 32 39 16 55 56 40 38 47 36 43 28 40 26 17 27 0 18 36 14 28 41 25 39 34 7 56 55 49 48 43 38 37 31 33 24 29 13 18 0 18 5 15 23 25 25 27 20 57 53 57 57 39 42 34 38 28 29 43 12 36 18 0 23 23 15 40 25 36 10 59 58 49 48 47 40 41 33 37 27 28 19 14 5 23 0 14 26 21 25 24 22 71 69 63 62 56 53 51 46 46 39 42 26 28 15 23 14 0 17 18 11 14 29 72 68 70 69 54 56 49 51 43 42 52 25 41 23 15 26 17 0 35 12 27 31 78 78 65 63 67 59 62 52 58 47 42 39 25 25 40 21 18 35 0 26 12 32 79 76 73 72 63 62 57 56 52 48 53 32 39 25 25 25 11 12 26 0 16 34 83 81 73 71 69 64 64 57 59 51 50 39 34 27 36 24 14 27 12 16 0 </coeffs>
+    </minimize>
+  </objectives>
+</instance>

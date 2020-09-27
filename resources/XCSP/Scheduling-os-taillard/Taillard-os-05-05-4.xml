@@ -1,0 +1,208 @@
+<instance format="XCSP3" type="COP">
+  <variables>
+    <array id="s" note="Start time of operation j for job i" size="[5][5]"> 0..428 </array>
+    <array id="e" note="End time of last operation of job i" size="[5]"> 0..428 </array>
+    <array id="d" note="Duration of operation j for job i" size="[5][5]">
+      <domain for="d[0][]"> 52 58 60 73 78 </domain>
+      <domain for="d[1][]"> 33 46 48 52 92 </domain>
+      <domain for="d[2][]"> 31 59 63 80 86 </domain>
+      <domain for="d[3][]"> 2 5 56 85 92 </domain>
+      <domain for="d[4][]"> 28 49 75 78 91 </domain>
+    </array>
+    <array id="w" note="Which machine for operation j of job i" size="[5][5]"> 0..4 </array>
+    <array id="sd" note="Start (dual) time of job i, machine k" size="[5][5]"> 0..428 </array>
+  </variables>
+  <constraints>
+    <group>
+      <intension> eq(%0,add(%1,%2)) </intension>
+      <args> e[0] s[0][4] d[0][4] </args>
+      <args> e[1] s[1][4] d[1][4] </args>
+      <args> e[2] s[2][4] d[2][4] </args>
+      <args> e[3] s[3][4] d[3][4] </args>
+      <args> e[4] s[4][4] d[4][4] </args>
+    </group>
+    <group>
+      <allDifferent> %... </allDifferent>
+      <args> w[0][] </args>
+      <args> w[1][] </args>
+      <args> w[2][] </args>
+      <args> w[3][] </args>
+      <args> w[4][] </args>
+    </group>
+    <block>
+      <group>
+        <extension>
+          <list> %0 %1 </list>
+          <supports> (0,58)(1,52)(2,78)(3,60)(4,73) </supports>
+        </extension>
+        <args> w[0][0] d[0][0] </args>
+        <args> w[0][1] d[0][1] </args>
+        <args> w[0][2] d[0][2] </args>
+        <args> w[0][3] d[0][3] </args>
+        <args> w[0][4] d[0][4] </args>
+      </group>
+      <group>
+        <extension>
+          <list> %0 %1 </list>
+          <supports> (0,33)(1,48)(2,46)(3,52)(4,92) </supports>
+        </extension>
+        <args> w[1][0] d[1][0] </args>
+        <args> w[1][1] d[1][1] </args>
+        <args> w[1][2] d[1][2] </args>
+        <args> w[1][3] d[1][3] </args>
+        <args> w[1][4] d[1][4] </args>
+      </group>
+      <group>
+        <extension>
+          <list> %0 %1 </list>
+          <supports> (0,86)(1,59)(2,80)(3,63)(4,31) </supports>
+        </extension>
+        <args> w[2][0] d[2][0] </args>
+        <args> w[2][1] d[2][1] </args>
+        <args> w[2][2] d[2][2] </args>
+        <args> w[2][3] d[2][3] </args>
+        <args> w[2][4] d[2][4] </args>
+      </group>
+      <group>
+        <extension>
+          <list> %0 %1 </list>
+          <supports> (0,92)(1,85)(2,5)(3,56)(4,2) </supports>
+        </extension>
+        <args> w[3][0] d[3][0] </args>
+        <args> w[3][1] d[3][1] </args>
+        <args> w[3][2] d[3][2] </args>
+        <args> w[3][3] d[3][3] </args>
+        <args> w[3][4] d[3][4] </args>
+      </group>
+      <group>
+        <extension>
+          <list> %0 %1 </list>
+          <supports> (0,28)(1,75)(2,91)(3,49)(4,78) </supports>
+        </extension>
+        <args> w[4][0] d[4][0] </args>
+        <args> w[4][1] d[4][1] </args>
+        <args> w[4][2] d[4][2] </args>
+        <args> w[4][3] d[4][3] </args>
+        <args> w[4][4] d[4][4] </args>
+      </group>
+    </block>
+    <group>
+      <intension> le(add(%0,%1),%2) </intension>
+      <args> s[0][0] d[0][0] s[0][1] </args>
+      <args> s[0][1] d[0][1] s[0][2] </args>
+      <args> s[0][2] d[0][2] s[0][3] </args>
+      <args> s[0][3] d[0][3] s[0][4] </args>
+      <args> s[1][0] d[1][0] s[1][1] </args>
+      <args> s[1][1] d[1][1] s[1][2] </args>
+      <args> s[1][2] d[1][2] s[1][3] </args>
+      <args> s[1][3] d[1][3] s[1][4] </args>
+      <args> s[2][0] d[2][0] s[2][1] </args>
+      <args> s[2][1] d[2][1] s[2][2] </args>
+      <args> s[2][2] d[2][2] s[2][3] </args>
+      <args> s[2][3] d[2][3] s[2][4] </args>
+      <args> s[3][0] d[3][0] s[3][1] </args>
+      <args> s[3][1] d[3][1] s[3][2] </args>
+      <args> s[3][2] d[3][2] s[3][3] </args>
+      <args> s[3][3] d[3][3] s[3][4] </args>
+      <args> s[4][0] d[4][0] s[4][1] </args>
+      <args> s[4][1] d[4][1] s[4][2] </args>
+      <args> s[4][2] d[4][2] s[4][3] </args>
+      <args> s[4][3] d[4][3] s[4][4] </args>
+    </group>
+    <block class="channeling">
+      <group>
+        <element>
+          <list> sd[0][] </list>
+          <index> %0 </index>
+          <value> %1 </value>
+        </element>
+        <args> w[0][0] s[0][0] </args>
+        <args> w[0][1] s[0][1] </args>
+        <args> w[0][2] s[0][2] </args>
+        <args> w[0][3] s[0][3] </args>
+        <args> w[0][4] s[0][4] </args>
+      </group>
+      <group>
+        <element>
+          <list> sd[1][] </list>
+          <index> %0 </index>
+          <value> %1 </value>
+        </element>
+        <args> w[1][0] s[1][0] </args>
+        <args> w[1][1] s[1][1] </args>
+        <args> w[1][2] s[1][2] </args>
+        <args> w[1][3] s[1][3] </args>
+        <args> w[1][4] s[1][4] </args>
+      </group>
+      <group>
+        <element>
+          <list> sd[2][] </list>
+          <index> %0 </index>
+          <value> %1 </value>
+        </element>
+        <args> w[2][0] s[2][0] </args>
+        <args> w[2][1] s[2][1] </args>
+        <args> w[2][2] s[2][2] </args>
+        <args> w[2][3] s[2][3] </args>
+        <args> w[2][4] s[2][4] </args>
+      </group>
+      <group>
+        <element>
+          <list> sd[3][] </list>
+          <index> %0 </index>
+          <value> %1 </value>
+        </element>
+        <args> w[3][0] s[3][0] </args>
+        <args> w[3][1] s[3][1] </args>
+        <args> w[3][2] s[3][2] </args>
+        <args> w[3][3] s[3][3] </args>
+        <args> w[3][4] s[3][4] </args>
+      </group>
+      <group>
+        <element>
+          <list> sd[4][] </list>
+          <index> %0 </index>
+          <value> %1 </value>
+        </element>
+        <args> w[4][0] s[4][0] </args>
+        <args> w[4][1] s[4][1] </args>
+        <args> w[4][2] s[4][2] </args>
+        <args> w[4][3] s[4][3] </args>
+        <args> w[4][4] s[4][4] </args>
+      </group>
+    </block>
+    <block>
+      <noOverlap>
+        <origins> sd[][0] </origins>
+        <lengths> 58 33 86 92 28 </lengths>
+      </noOverlap>
+      <noOverlap>
+        <origins> sd[][1] </origins>
+        <lengths> 52 48 59 85 75 </lengths>
+      </noOverlap>
+      <noOverlap>
+        <origins> sd[][2] </origins>
+        <lengths> 78 46 80 5 91 </lengths>
+      </noOverlap>
+      <noOverlap>
+        <origins> sd[][3] </origins>
+        <lengths> 60 52 63 56 49 </lengths>
+      </noOverlap>
+      <noOverlap>
+        <origins> sd[][4] </origins>
+        <lengths> 73 92 31 2 78 </lengths>
+      </noOverlap>
+    </block>
+    <group class="redundantConstraints">
+      <intension> ge(%0,%1) </intension>
+      <args> e[0] 321 </args>
+      <args> e[1] 271 </args>
+      <args> e[2] 319 </args>
+      <args> e[3] 240 </args>
+      <args> e[4] 321 </args>
+    </group>
+  </constraints>
+  <objectives>
+    <minimize type="maximum"> e[] </minimize>
+  </objectives>
+</instance>
